@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>基米天堂</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(60deg, #1a2a6c,#b21f1f 80%,#fdbb2d);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: white;
+            overflow: hidden;
+        }
+        
+        .container {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        h1 {
+            margin-bottom: 30px;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+        
+        .cp-container {
+            width: 250px;
+            height: 250px;
+            margin: 0 auto 40px;
+        }
+        
+        .cp {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-image: url('1.jpg');
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            transition: transform 0.5s ease;
+        }
+        
+        .cp.playing {
+            animation: rotate 12s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .play-btn, .playlist-btn, .prev-btn, .next-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #fdbb2d;
+            border: none;
+            color: #000;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .playlist-btn {
+            background: #1a2a6c;
+            color: white;
+        }
+        
+        .prev-btn, .next-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 20px;
+        }
+        
+        .play-btn:hover, .playlist-btn:hover, .prev-btn:hover, .next-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .play-btn:hover {
+            background: #ffcc44;
+        }
+        
+        .playlist-btn:hover {
+            background: #2a3a8c;
+        }
+        
+        .prev-btn:hover, .next-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .track-info {
+            margin-top: 20px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        .playlistContainer {
+            position: fixed;
+            top: 0;
+            right: -350px;
+            width: 300px;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+            transition: right 0.3s ease;
+            z-index: 1;
+            overflow-y: auto;
+        }
+        
+        .playlistContainer.active {
+            right: 0;
+        }
+        
+        .playlist-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .playlist-title {
+            font-size: 20px;
+            font-weight: 300;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        .playlist-items {
+            list-style: none;
+        }
+        
+        .playlist-item {
+            padding: 12px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .playlist-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .playlist-item.active {
+            background: rgba(253, 187, 45, 0.3);
+            border-left: 3px solid #fdbb2d;
+        }
+        
+        .cover {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+        
+        .cover.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .current {
+            margin-top: 15px;
+            font-size: 16px;
+            height: 50px;
+        }
+        
+        .folder-info {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #fdbb2d;
+        }
+        
+        .file-input-container {
+            display: none;
+        }
+        
+        .cnt {
+            font-weight: bold;
+            color: #fdbb2d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>基米播放器</h1>
+        
+        <div class="cp-container">
+            <div class="cp" id="cp"></div>
+        </div>
+        
+        <div class="current" id="current">请选择包含MP3文件的文件夹</div>
+        
+        <div class="controls">
+            <button class="prev-btn" id="prevBtn">⏮︎</button>
+            <button class="play-btn" id="playBtn">▶</button>
+            <button class="next-btn" id="nextBtn">⏭</button>
+            <button class="playlist-btn" id="playlistBtn">≡</button>
+        </div>
+        
+        <div class="folder-info" id="folderInfo">点击播放按钮选择文件夹</div>
+        
+        <div class="track-info">
+            提示：已消耗<span class="cnt" id="count">0</span>次免费观看次数
+        </div>
+    </div>
+    
+    <div class="playlistContainer" id="playlistContainer">
+        <div class="playlist-header">
+            <h2 class="playlist-title">播放列表</h2>
+            <button class="close-btn" id="closePlaylist">×</button>
+        </div>
+        <ul class="playlist-items" id="playlistItems"></ul>
+    </div>
+    
+    <div class="cover" id="cover"></div>
+    
+    <input type="file" id="fileInput" webkitdirectory directory multiple class="file-input-container">
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cp = document.getElementById('cp');
+            const playBtn = document.getElementById('playBtn');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const current = document.getElementById('current');
+            const folderInfo = document.getElementById('folderInfo');
+            const fileInput = document.getElementById('fileInput');
+            const count = document.getElementById('count');
+            const playlistBtn = document.getElementById('playlistBtn');
+            const playlistContainer = document.getElementById('playlistContainer');
+            const closePlaylist = document.getElementById('closePlaylist');
+            const cover = document.getElementById('cover');
+            const playlistItems = document.getElementById('playlistItems');
+            
+            let audio = null;
+            let isPlaying = false;
+            let currentIndex = 0;
+            let userFiles = [];
+            let folderSelected = false;
+            let playCount = 0;
+            
+            // 计数器
+            function updateCounter() {
+                count.textContent = playCount;
+            }
+            
+            function incrementCounter() {
+                playCount++;
+                updateCounter();
+            }
+            
+            // 切换歌曲并播放
+            function switchTrackAndPlay(newIndex) {
+                currentIndex = newIndex;
+                updateTrackInfo();
+                incrementCounter();
+                
+                if (!isPlaying) {
+                    audio.play().catch(Playerror);
+                    cp.classList.add('playing');
+                    playBtn.textContent = '❚❚';
+                    isPlaying = true;
+                }
+            }
+            
+            // 初始化播放器
+            function initializePlayer() {
+                if (!folderSelected) {
+                    fileInput.click();
+                    return false;
+                }
+                return true;
+            }
+            
+            // 播放/暂停
+            playBtn.addEventListener('click', function() {
+                if (!initializePlayer()) return;
+                
+                if (isPlaying) {
+                    audio.pause();
+                    cp.classList.remove('playing');
+                    playBtn.textContent = '▶';
+                    isPlaying = false;
+                } else {
+                    audio.play().catch(Playerror);
+                    cp.classList.add('playing');
+                    playBtn.textContent = '❚❚';
+                    isPlaying = true;
+                    
+                    incrementCounter();
+                }
+            });
+            
+            // 文件夹选择
+            fileInput.addEventListener('change', function(e) {
+                const files = Array.from(e.target.files);
+                
+                userFiles = files.filter(file => file.name.toLowerCase().endsWith('.mp3'));
+                
+                if (userFiles.length === 0) {
+                    alert('所选文件夹中没有找到MP3文件，请重新选择');
+                    return;
+                }
+                
+                userFiles.sort((a, b) => a.name.localeCompare(b.name));
+                
+                createPlaylist();
+                
+                if (audio) {
+                    audio.pause();
+                }
+                
+                audio = new Audio(URL.createObjectURL(userFiles[0]));
+                currentIndex = 0;
+                
+                // 更新歌曲信息
+                updateTrackInfo();
+                
+                audio.addEventListener('ended', function() {
+                    switchTrackAndPlay((currentIndex + 1) % userFiles.length);
+                });
+                
+                folderSelected = true;
+                folderInfo.textContent = `已选择文件夹，找到 ${userFiles.length} 首歌曲`;
+                
+                updateTrackInfo();
+                
+                audio.play().catch(Playerror);
+                cp.classList.add('playing');
+                playBtn.textContent = '❚❚';
+                isPlaying = true;
+                
+                incrementCounter();
+            });
+            
+            // 上一首
+            prevBtn.addEventListener('click', function() {
+                if (!folderSelected) return;
+                switchTrackAndPlay((currentIndex - 1 + userFiles.length) % userFiles.length);
+            });
+            
+            // 下一首
+            nextBtn.addEventListener('click', function() {
+                if (!folderSelected) return;
+                switchTrackAndPlay((currentIndex + 1) % userFiles.length);
+            });
+            
+            // 当前播放的歌曲信息
+            function updateTrackInfo() {
+                if (!folderSelected || userFiles.length === 0) return;
+                
+                const currentFile = userFiles[currentIndex];
+                current.textContent = currentFile.name.replace('.mp3', '');
+                
+                if (audio && audio.src.startsWith('blob:')) {
+                    URL.revokeObjectURL(audio.src);
+                }
+                
+                if (audio) {
+                    audio.src = URL.createObjectURL(currentFile);
+                }
+                
+                document.querySelectorAll('.playlist-item').forEach((item, index) => {
+                    if (index === currentIndex) {
+                        item.classList.add('active');
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+                
+                if (isPlaying && audio) {
+                    audio.play().catch(Playerror);
+                }
+            }
+            
+            // 播放列表
+            function createPlaylist() {
+                playlistItems.innerHTML = '';
+                
+                userFiles.forEach((file, index) => {
+                    const li = document.createElement('li');
+                    li.className = 'playlist-item';
+                    if (index === 0) li.classList.add('active');
+                    li.textContent = file.name.replace('.mp3', '');
+                    
+                    li.addEventListener('click', function() {
+                        switchTrackAndPlay(index);
+                    });
+                    
+                    playlistItems.appendChild(li);
+                });
+            }
+            
+            function togglePlaylist() {
+                playlistContainer.classList.toggle('active');
+                cover.classList.toggle('active');
+            }
+            
+            playlistBtn.addEventListener('click', togglePlaylist);
+            closePlaylist.addEventListener('click', togglePlaylist);
+            cover.addEventListener('click', togglePlaylist);
+            
+            updateCounter();
+            
+            function Playerror(error) {
+                console.error('播放失败:', error);
+                alert('播放失败，请确保选择了有效的MP3文件');
+            }
+        });
+    </script>
+</body>
+</html>
