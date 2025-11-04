@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>网站上方标签</title>
+		<base target="_blank">
+	</head>
+	
+	<body>
+		<a href="#manbo" target="_self"><h1>标题，字号可选1-6，越大字越小</h1><a>
+		<!--此处为笔记注释
+			在标题中显示<h1>等字符需要转义
+			<为&lt(less than)
+			>为&gt(greater than)
+			若要显示&字符同样需要转义为&amp(ampersand‌)
+		-->
+		
+		<p>段落1</p>
+		<p>段落2</p>
+		<br/>
+		<p>......</p>
+		<p>段落  n</p>
+		<pre>段落
+					n</pre>
+		<!--此处为笔记注释
+			对于空元素，如换行元素<br>
+			不需要</br>来关闭它，但是为了规范最好写作<br />
+			即在元素里直接关闭而非增加一个关闭元素
+			
+			另外，浏览器会忽略段落中多余的空格和换行(只剩一个小间隔分词用)
+			如果需要加空格请使用
+			&nbsp	不换行空格（最常用）
+			&ensp	半个汉字宽度的空格
+			&emsp   一个汉字宽度的空格
+			
+			或者使用<pre>xxx  xxx</pre>(其空格与换行不会被忽略)
+		-->
+		<a href="https://www.baidu.com">百度链接</a>
+		<hr/><!--水平线-->
+		
+		<!--此处为笔记注释
+			对于元素的属性
+			若属性内含双引号，则使用='xxx',若内含单引号，则使用="xxx"
+			若单双引号都存在，则需要转义
+			双引号转义为&quot
+			单引号转义为&apos
+			
+			target属性（打开方式）
+			_blank: 在新窗口或新标签页中打开链接。
+			_self: 在当前窗口或标签页中打开链接（默认）。
+			_parent: 在父框架中打开链接。
+			_top: 在整个窗口中打开链接，取消任何框架。
+		-->
+		<img id="manbo"src="manbo.jpg" width="300" height="300"/ alt="曼波！">
+		<p>
+			<b>这个文本是加粗的</b>
+			<br />
+			<strong>这个文本是加粗的</strong>
+			<br />
+			<big>这个文本字体放大</big>
+			<br />
+			<em>这个文本是斜体的</em>
+			<br />
+			<i>这个文本是斜体的</i>
+			<br />
+			<small>这个文本是缩小的</small>
+			<br />
+			这个文本包含
+			<sub>下标</sub>
+			<br />
+			这个文本包含
+			<sup>上标</sup>
+			<br />
+			<abbr title="唉舞萌痴"><del>wmdx</del> <ins>awmc</ins></abbr>
+			<br />
+			<blockquote>
+				<p>我补药上早八</p>
+				<footer>———沃兹基硕德</footer>
+			</blockquote>
+		</p>
+		
+	</body>
+	
+</html>
+
+
+
+
+
+
+

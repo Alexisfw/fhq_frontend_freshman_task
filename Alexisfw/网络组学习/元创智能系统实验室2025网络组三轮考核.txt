@@ -1,0 +1,9 @@
+hdu孵化器网络组三轮考核
+主要任务
+前端https://piwqb94u4q.feishu.cn/docx/R0kXdWospodImaxmHRHcE5o4nHd
+后端：https://piwqb94u4q.feishu.cn/docx/EtJnd23pBorCdTxgSracRlTKnvh
+前端项目仓库：https://github.com/lbasei/fhq_frontend_freshman_task
+后端项目仓库：https://github.com/lbasei/fhq_be_task
+其他技能
+推荐学习：markdown格式[Markdown 基本语法 | Markdown 教程] https://markdown.com.cn/basic-syntax/
+（推荐使用工具Typora[Typora 官方中文站 (typoraio.cn)] https://typoraio.cn/
