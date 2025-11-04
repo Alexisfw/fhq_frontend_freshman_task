@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>addEventListener vs onclick</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .comparison {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .card {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card h2 {
+            color: #2575fc;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .feature-list {
+            list-style-type: none;
+        }
+        
+        .feature-list li {
+            padding: 10px 0;
+            border-bottom: 1px dashed #eee;
+            display: flex;
+            align-items: center;
+        }
+        
+        .feature-list li:before {
+            content: "•";
+            color: #2575fc;
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .demo-section {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .demo-section h2 {
+            color: #2575fc;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .demo-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .demo-box {
+            flex: 1;
+            min-width: 250px;
+            padding: 20px;
+            border-radius: 8px;
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+        }
+        
+        .demo-box h3 {
+            margin-bottom: 15px;
+            color: #495057;
+        }
+        
+        button {
+            background: #2575fc;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #1a68e8;
+        }
+        
+        .output {
+            margin-top: 15px;
+            padding: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            min-height: 80px;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+        
+        .code-example {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            overflow-x: auto;
+        }
+        
+        .code-example h3 {
+            color: #63b3ed;
+            margin-bottom: 15px;
+        }
+        
+        pre {
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+        
+        .highlight {
+            background-color: #fffbdd;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        
+        @media (max-width: 768px) {
+            .comparison, .demo-container {
+                flex-direction: column;
+            }
+            
+            .card, .demo-box {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>addEventListener vs onclick</h1>
+            <p class="subtitle">理解JavaScript中两种事件处理方式的区别</p>
+        </header>
+        
+        <div class="comparison">
+            <div class="card">
+                <h2>addEventListener</h2>
+                <ul class="feature-list">
+                    <li>可以添加多个事件处理程序</li>
+                    <li>可以控制事件传播阶段（捕获/冒泡）</li>
+                    <li>支持更多事件类型</li>
+                    <li>需要使用removeEventListener移除</li>
+                    <li>IE9+支持</li>
+                    <li>更灵活，推荐用于复杂应用</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h2>onclick</h2>
+                <ul class="feature-list">
+                    <li>只能有一个事件处理程序</li>
+                    <li>只能在冒泡阶段处理事件</li>
+                    <li>支持基本事件类型</li>
+                    <li>通过设置为null移除</li>
+                    <li>所有浏览器支持</li>
+                    <li>简单直接，适合简单场景</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="demo-section">
+            <h2>实际演示</h2>
+            <div class="demo-container">
+                <div class="demo-box">
+                    <h3>addEventListener 演示</h3>
+                    <p>点击按钮查看多个事件处理程序如何工作：</p>
+                    <button id="addEventBtn">点击我</button>
+                    <div class="output" id="addEventOutput"></div>
+                </div>
+                
+                <div class="demo-box">
+                    <h3>onclick 演示</h3>
+                    <p>点击按钮查看单个事件处理程序：</p>
+                    <button id="onclickBtn">点击我</button>
+                    <div class="output" id="onclickOutput"></div>
+                </div>
+            </div>
+            
+            <div class="demo-container" style="margin-top: 20px;">
+                <div class="demo-box">
+                    <h3>事件传播演示</h3>
+                    <p>点击内部元素查看事件传播：</p>
+                    <div id="outerDiv" style="padding: 20px; background: #e2e8f0; border-radius: 5px;">
+                        外部元素
+                        <div id="innerDiv" style="padding: 15px; margin: 10px; background: #cbd5e0; border-radius: 5px;">
+                            内部元素
+                        </div>
+                    </div>
+                    <div class="output" id="propagationOutput"></div>
+                </div>
+                
+                <div class="demo-box">
+                    <h3>移除事件演示</h3>
+                    <p>添加然后移除事件处理程序：</p>
+                    <button id="addHandlerBtn">添加事件处理程序</button>
+                    <button id="removeHandlerBtn">移除事件处理程序</button>
+                    <button id="testHandlerBtn">测试事件</button>
+                    <div class="output" id="removeOutput"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="code-example">
+            <h3>代码示例</h3>
+            <pre><code>// addEventListener 示例
+document.getElementById('addEventBtn').addEventListener('click', function() {
+    console.log('第一个处理程序');
+});
+
+document.getElementById('addEventBtn').addEventListener('click', function() {
+    console.log('第二个处理程序');
+});
+
+// onclick 示例
+document.getElementById('onclickBtn').onclick = function() {
+    console.log('第一个onclick处理程序');
+};
+
+// 这会覆盖之前的处理程序
+document.getElementById('onclickBtn').onclick = function() {
+    console.log('第二个onclick处理程序');
+};
+
+// 事件传播控制
+document.getElementById('outerDiv').addEventListener('click', function() {
+    console.log('外部元素 - 冒泡阶段');
+}, false); // false = 冒泡阶段
+
+document.getElementById('innerDiv').addEventListener('click', function() {
+    console.log('内部元素 - 捕获阶段');
+}, true); // true = 捕获阶段
+
+// 移除事件处理程序
+function myEventHandler() {
+    console.log('事件被处理');
+}
+
+document.getElementById('addHandlerBtn').addEventListener('click', function() {
+    document.getElementById('testHandlerBtn').addEventListener('click', myEventHandler);
+    console.log('事件处理程序已添加');
+});
+
+document.getElementById('removeHandlerBtn').addEventListener('click', function() {
+    document.getElementById('testHandlerBtn').removeEventListener('click', myEventHandler);
+    console.log('事件处理程序已移除');
+});</code></pre>
+        </div>
+    </div>
+
+    <script>
+        // addEventListener 演示
+        document.getElementById('addEventBtn').addEventListener('click', function() {
+            const output = document.getElementById('addEventOutput');
+            output.innerHTML += '<p>第一个处理程序执行</p>';
+        });
+
+        document.getElementById('addEventBtn').addEventListener('click', function() {
+            const output = document.getElementById('addEventOutput');
+            output.innerHTML += '<p>第二个处理程序执行</p>';
+        });
+
+        // onclick 演示
+        document.getElementById('onclickBtn').onclick = function() {
+            const output = document.getElementById('onclickOutput');
+            output.innerHTML = '<p>第一个onclick处理程序执行</p>';
+        };
+
+        // 这会覆盖之前的处理程序
+        document.getElementById('onclickBtn').onclick = function() {
+            const output = document.getElementById('onclickOutput');
+            output.innerHTML = '<p>第二个onclick处理程序执行（覆盖了第一个）</p>';
+        };
+
+        // 事件传播演示
+        document.getElementById('outerDiv').addEventListener('click', function() {
+            const output = document.getElementById('propagationOutput');
+            output.innerHTML += '<p>外部元素 - 冒泡阶段</p>';
+        }, false); // false = 冒泡阶段
+
+        document.getElementById('innerDiv').addEventListener('click', function() {
+            const output = document.getElementById('propagationOutput');
+            output.innerHTML += '<p>内部元素 - 捕获阶段</p>';
+        }, true); // true = 捕获阶段
+
+        document.getElementById('innerDiv').addEventListener('click', function() {
+            const output = document.getElementById('propagationOutput');
+            output.innerHTML += '<p>内部元素 - 冒泡阶段</p>';
+        }, false);
+
+        // 移除事件演示
+        function myEventHandler() {
+            const output = document.getElementById('removeOutput');
+            output.innerHTML += '<p>事件处理程序被执行</p>';
+        }
+
+        document.getElementById('addHandlerBtn').addEventListener('click', function() {
+            document.getElementById('testHandlerBtn').addEventListener('click', myEventHandler);
+            const output = document.getElementById('removeOutput');
+            output.innerHTML = '<p>事件处理程序已添加</p>';
+        });
+
+        document.getElementById('removeHandlerBtn').addEventListener('click', function() {
+            document.getElementById('testHandlerBtn').removeEventListener('click', myEventHandler);
+            const output = document.getElementById('removeOutput');
+            output.innerHTML = '<p>事件处理程序已移除</p>';
+        });
+    </script>
+</body>
+</html>
